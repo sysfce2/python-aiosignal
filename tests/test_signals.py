@@ -1,9 +1,12 @@
 import re
+from typing import Any, TypeVar
 from unittest import mock
 
 import pytest
 
 from aiosignal import Signal
+
+_T = TypeVar('_T')
 
 
 class Owner:
@@ -19,7 +22,7 @@ def owner() -> Owner:
 @pytest.mark.asyncio
 async def test_add_signal_handler_not_a_callable(owner: Owner) -> None:
     callback = True
-    signal = Signal(owner)
+    signal: Any = Signal(owner)
     signal.append(callback)
     signal.freeze()
     with pytest.raises(TypeError):
@@ -28,12 +31,12 @@ async def test_add_signal_handler_not_a_callable(owner: Owner) -> None:
 
 @pytest.mark.asyncio
 async def test_function_signal_dispatch_kwargs(owner: Owner) -> None:
-    signal = Signal(owner)
+    signal: Signal[None, pass] = Signal(owner)
     kwargs = {"foo": 1, "bar": 2}
 
     callback_mock = mock.Mock()
 
-    async def callback(**kwargs):
+    async def callback(**kwargs: int) -> None:
         callback_mock(**kwargs)
 
     signal.append(callback)

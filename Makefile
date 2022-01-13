@@ -15,9 +15,9 @@ ifdef CI
 else
 	pre-commit run --all-files
 endif
-	mypy aiosignal
+	mypy aiosignal tests
 
-.develop: .install-deps $(shell find aiosignal -type f) .flake check_changes mypy
+.develop: .install-deps $(shell find aiosignal -type f)
 	# pip install -e .
 	@touch .develop
 
